@@ -39,7 +39,7 @@ suite('Functional Tests', () => {
             .end((err, res) => {
                 assert.isNull(err);
                 assert.equal(res.status, 200);
-                assert.deepStrictEqual(res.body ,{ error: 'Invalid value for locale field' });
+                assert.deepStrictEqual(res.body, { error: 'Invalid value for locale field' });
                 done()
             });
     })
@@ -52,7 +52,7 @@ suite('Functional Tests', () => {
             .end((err, res) => {
                 assert.isNull(err);
                 assert.equal(res.status, 200);
-                assert.deepStrictEqual(res.body ,{ error: 'Required field(s) missing' });
+                assert.deepStrictEqual(res.body, { error: 'Required field(s) missing' });
                 done()
             });
     })
@@ -65,7 +65,7 @@ suite('Functional Tests', () => {
             .end((err, res) => {
                 assert.isNull(err);
                 assert.equal(res.status, 200);
-                assert.deepStrictEqual(res.body ,{ error: 'Required field(s) missing' });
+                assert.deepStrictEqual(res.body, { error: 'Required field(s) missing' });
                 done()
             });
     })
@@ -73,29 +73,35 @@ suite('Functional Tests', () => {
         chai.request(server)
             .post("/api/translate")
             .send({
-                 text: "",
+                text: "",
                 locale: "british-to-american"
             })
             .end((err, res) => {
                 assert.isNull(err);
                 assert.equal(res.status, 200);
-                assert.deepStrictEqual(res.body ,{"error":"No text to translate"});
+                assert.deepStrictEqual(res.body, { "error": "No text to translate" });
                 done()
             });
     })
     test("6. Translation with text that needs no translation: POST request to /api/translate", (done) => {
-chai.request(server)
+        chai.request(server)
             .post("/api/translate")
-            .send({text: "I had a bicky then went to the chippy.", 
-                   locale: "american-to-british"})
+            .send({
+                text: "I had a bicky then went to the chippy.",
+                locale: "american-to-british"
+            })
             .end((err, res) => {
                 assert.isNull(err);
                 assert.equal(res.status, 200);
-                assert.deepStrictEqual(res.body ,{text: "I had a bicky then went to the chippy.",
-                                                  translation: "Everything looks good to me!"
-});
+                assert.deepStrictEqual(res.body, {
+                    text: "I had a bicky then went to the chippy.",
+                    translation: "Everything looks good to me!"
+                });
                 done()
             });
+    })
+    after(()=>{
+        chai.request(server).get("/")
     })
 
 });
