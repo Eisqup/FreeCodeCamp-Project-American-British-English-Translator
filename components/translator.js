@@ -13,7 +13,7 @@ class Translator {
     searchKeyWordsInString(string, searchKeyWordsArray, translateDict) {
 
         const regexValue = translateDict.hasOwnProperty('.') ? '.' :
-            translateDict.hasOwnProperty(':') ? ':' : ''
+            translateDict.hasOwnProperty(':') ? ':' : false
 
         // search for a timematch
         const timeMatches = string.match(new RegExp(`\\b(\\d{1,2}[${regexValue}]\\d{2})\\b`, 'g'))
@@ -71,12 +71,13 @@ class Translator {
         let result = toTranlateString
 
         toTranslatWordsArray.forEach((value) => {
+            console.log(value)
             // check for a time
             if (value.match(/\b(\d{1,2}[:.]\d{2})\b/g)) {
 
                 const newValue = translateDict.hasOwnProperty('.') ? value.replace('.', ':') :
                     translateDict.hasOwnProperty(':') ? value.replace(':', '.') : value;
-                result = toTranlateString.replace(value, this.highlightWord(newValue))
+                result = result.replace(value, this.highlightWord(newValue))
 
                 return
             }
@@ -84,17 +85,16 @@ class Translator {
             if (this.checkForTitle(value)) {
                 let newValue = translateDict[value.toLowerCase()]
                 newValue = newValue.charAt(0).toUpperCase() + newValue.slice(1)
-                result = toTranlateString.replace(value, this.highlightWord(newValue))
+                result = result.replace(value, this.highlightWord(newValue))
                 return
             }
-            result = toTranlateString.replace(value, this.highlightWord(translateDict[value.toLowerCase()]))
+            result = result.replace(value, this.highlightWord(translateDict[value.toLowerCase()]))
         })
         return result
     }
 
     tranlate(toTranlateString, toTranslateLanguage) {
         let translateDict
-        let toTranslatWordsArray
 
         if (toTranslateLanguage == "british-to-american") {
             translateDict = this.britishToAmericanDict()
@@ -109,8 +109,8 @@ class Translator {
         }
         const tanslateKeys = Object.keys(translateDict)
 
-        toTranslatWordsArray = this.searchKeyWordsInString(toTranlateString, tanslateKeys, translateDict)
- 
+        const toTranslatWordsArray = this.searchKeyWordsInString(toTranlateString, tanslateKeys, translateDict)
+
         return this.createReturnMassage(toTranlateString, toTranslatWordsArray, translateDict)
     }
 }
